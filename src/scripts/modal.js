@@ -9,6 +9,7 @@ export function openModal(modal) {
 
 export function closeModal(modal) {
   modal.classList.remove("popup_is-opened");
+  /* modal.classList.remove("popup_is-animated"); */
   document.removeEventListener("keydown", (evt) => {
     if (evt.key === "Escape") {
       modal.classList.remove("popup_is-opened");

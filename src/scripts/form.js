@@ -3,8 +3,8 @@ export const jobInput = document.querySelector(".profile__description");
 export const formElementEdit = document.querySelector(".popup__form_edit");
 export const formElementNew = document.querySelector(".popup__form_new");
 
-import { placesList } from "./index.js";
-import { cardCreate, deleteCard, likeCard, imgCard } from "./scripts/cards.js";
+import { placesList } from "../index.js";
+import { cardCreate, deleteCard, likeCard, clickImg } from "./cards.js";
 
 /* Работа модального окна "Редактировать", после нажатия кнопки сохарнить */
 export function handleFormSubmitEdit(evt) {
@@ -20,10 +20,10 @@ export function handleFormSubmitNew(evt) {
     cardCreate(
       formElementNew.elements.place_name.value,
       formElementNew.elements.link.value,
-      "Красивое место добавленое пользователем",
+      "Красивое место, добавленое пользователем",
       deleteCard,
       likeCard,
-      imgCard
+      clickImg
     )
   );
 }

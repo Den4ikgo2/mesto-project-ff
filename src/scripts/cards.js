@@ -1,3 +1,5 @@
+import { openModal} from "./modal.js";
+
 export const initialCards = [
     {
       name: "Архыз",
@@ -12,7 +14,7 @@ export const initialCards = [
     {
       name: "Иваново",
       link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-      alt: "Многоэтажный дома в Иваново",
+      alt: "Многоэтажные дома в Иваново",
     },
     {
       name: "Камчатка",
@@ -37,7 +39,7 @@ export function cardCreate(name, link, alt, cardDel, butLike, imgEle) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   const buttonLike = cardElement.querySelector(".card__like-button");
-  const imgElement = cardTemplate.querySelector(".card__image");
+  const cardImage = cardElement.querySelector(".card__image");
 
   cardElement.querySelector(".card__image").src = link;
   cardElement.querySelector(".card__title").textContent = name;
@@ -45,7 +47,7 @@ export function cardCreate(name, link, alt, cardDel, butLike, imgEle) {
 
   buttonDelete.addEventListener("click", cardDel);
   buttonLike.addEventListener("click", butLike);
-  imgElement.addEventListener("click", imgEle)
+  cardImage.addEventListener("click", imgEle);
 
   return cardElement;
 }
@@ -62,6 +64,11 @@ export function likeCard(event) {
 }
 
 /* Функция открытия увеличенной картинки */
-export function imgCard(event) {
-  event.target.classList.toggle("popup__content_content_image");
+export function clickImg(event) {
+    const popup = document.querySelector(".popup_type_image")
+    const popupImg = popup.querySelector(".popup__image")
+    const popupText = popup.querySelector(".popup__caption")
+    openModal(popup);
+    popupImg.src = event.target.src;
+    popupText.textContent = event.target.alt;
 }
