@@ -3,8 +3,8 @@ export const jobInput = document.querySelector(".profile__description");
 export const formElementEdit = document.querySelector(".popup__form_edit");
 export const formElementNew = document.querySelector(".popup__form_new");
 
-import { placesList, popupNew, popupEdit } from "../index.js";
-import { cardCreate, deleteCard, likeCard, clickImg } from "./card.js";
+import { placesList, popupNew, popupEdit, clickImg } from "../index.js";
+import { cardCreate, deleteCard, likeCard } from "./card.js";
 import { closeModal } from "./modal.js";
 
 /* Работа модального окна "Редактировать", после нажатия кнопки сохарнить */

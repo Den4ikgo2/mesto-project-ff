@@ -1,6 +1,3 @@
-
-import {popupImageText, popupImage} from "../index.js";
-
 /* Функция создания карточки */
 export function cardCreate(name, link, alt, cardDel, butLike, imgEle) {
   const cardTemplate = document.querySelector("#card-template").content;
@@ -29,11 +26,4 @@ export function deleteCard(event) {
 /* Функция обработчика лайка на карточке */
 export function likeCard(event) {
   event.target.classList.toggle("card__like-button_is-active");
-}
-
-/* Функция открытия увеличенной картинки */
-export function clickImg(event) {
-  popupImage.src = event.target.src;
-  popupImage.alt = event.target.alt;
-  popupImageText.textContent = event.target.alt;
 }

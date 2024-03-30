@@ -1,7 +1,7 @@
 import "./pages/index.css";
-import { cardCreate, deleteCard, likeCard, clickImg } from "./scripts/card.js";
+import { cardCreate, deleteCard, likeCard } from "./scripts/card.js";
 import { initialCards } from "./scripts/cards.js";
-import { openModal,closePopupByOverlay, openPopupImage} from "./scripts/modal.js";
+import { openModal, closePopupByOverlay } from "./scripts/modal.js";
 import {
   handleFormSubmitEdit,
   handleFormSubmitNew,
@@ -20,9 +20,6 @@ const clickImage = document.querySelector(".card__image");
 export const popupEdit = document.querySelector(".popup_type_edit");
 export const popupNew = document.querySelector(".popup_type_new-card");
 const popups = document.querySelectorAll(".popup");
-export const popupTypeImage = document.querySelector(".popup_type_image");
-export const popupImageText = popupTypeImage.querySelector(".popup__caption");
-export const popupImage = popupTypeImage.querySelector(".popup__image");
 
 /* Добавление карточки в код */
 initialCards.forEach((item) => {
@@ -49,8 +46,16 @@ buttonNew.addEventListener("click", () => {
   openModal(popupNew);
 });
 
-/* Слушатель для открытия модального окна, при клике на изображение */
-placesList.addEventListener("click", openPopupImage)
+/* Метод для открытия модального окна, при клике на изображение */
+export function clickImg(event) {
+  const popup = document.querySelector(".popup_type_image");
+  const popupImg = popup.querySelector(".popup__image");
+  const popupText = popup.querySelector(".popup__caption");
+  openModal(popup);
+  popupImg.src = event.target.src;
+  popupText.textContent = event.target.alt;
+  popupImg.textContent = event.target.alt;
+}
 
 /* Перебор модальных окон, для их закрытия */
 popups.forEach((popup) => {
