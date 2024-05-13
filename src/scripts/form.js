@@ -4,7 +4,7 @@ export const formElementEdit = document.querySelector(".popup__form_edit");
 export const formElementNew = document.querySelector(".popup__form_new");
 
 import { placesList, popupNew, popupEdit, clickImg } from "../index.js";
-import { cardCreate, deleteCard, likeCard } from "./card.js";
+import { cardCreate, likeCard } from "./card.js";
 import { closeModal } from "./modal.js";
 
 /* Работа модального окна "Редактировать", после нажатия кнопки сохарнить */
@@ -30,4 +30,6 @@ export function handleFormSubmitNew(evt) {
   );
   formElementNew.reset();
   closeModal(popupNew);
+  formElementNew.querySelector(".popup__button").classList.add("popup__button_inactive");
+
 }
