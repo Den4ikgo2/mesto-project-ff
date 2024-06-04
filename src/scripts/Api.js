@@ -11,21 +11,23 @@ const config = {
     }
 }
 
+function requestVerification (res) {
+    if(res.ok){
+        return res.json();
+    } else {
+        return Promise.reject(`Ошибка: ${res.status}`);
+    }
+}
+
 /* Функция для получения информации обо мне с сервера */
 export function userInfoPromise() {
     return fetch(`${config.baseUrl}users/me`, {
         headers: config.headers,
     })
-    .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
 }
 
   /* Функция для получения списка карточек */
@@ -33,38 +35,26 @@ export function userInfoPromise() {
     return fetch(`${config.baseUrl}cards`, {
       headers: config.headers,
     })
-    .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })    
+    })  */   
   }
 
 /* Функция на изменение профиля */
 export function editCard(nameInput, jobInput) {
-    fetch(`${config.baseUrl}users/me`, {
+    return fetch(`${config.baseUrl}users/me`, {
       method: "PATCH",
       headers: config.headers,
       body: JSON.stringify({
-        name: nameInput.textContent,
-        about: jobInput.textContent,
+        name: nameInput,
+        about: jobInput,
       }),
     })
-    /* .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    }) */
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
   }
 
 /* Функция добавления карточки */
@@ -77,16 +67,10 @@ export function addCard(name_value, link_value) {
         link: link_value,
       }),
     })
-    .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
   }
   
 /* Функция удаления карточки */  
@@ -95,16 +79,10 @@ export function destructionCard(id) {
       method: "DELETE",
       headers: config.headers,
     })
-    .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
   }
 
 /* Функция для отправки в массив лайка */
@@ -113,16 +91,10 @@ export function sendLike(id) {
       method: "PUT",
       headers: config.headers,
     })
-    .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
   }
 
 /* Функция для удаление с массива карточки лайка (на сервере) */
@@ -131,35 +103,23 @@ export function deleteLike(id) {
       method: "DELETE",
       headers: config.headers,
     })
-    .then((res) => {
-        if(res.pk){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
   }
 
   /* Функция обновления аватарки пользователя */
   export function profilPatch(link) {
-    fetch(`${config.baseUrl}users/me/avatar`, {
+    return fetch(`${config.baseUrl}users/me/avatar`, {
       method: "PATCH",
       headers: config.headers,
       body: JSON.stringify({
         avatar: link,
       }),
     })
-    .then((res) => {
-        if(res.ok){
-            return res.json();
-        } else {
-            return Promise.reject(`Ошибка: ${res.status}`);
-        }
-    })
-    .catch((err) => {
+    .then((res) => requestVerification(res))
+    /* .catch((err) => {
         console.log(err);
-    })
+    }) */
   }

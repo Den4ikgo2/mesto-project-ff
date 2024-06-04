@@ -1,54 +1,54 @@
 /* Функция выведение ошибки */
-const showInputError = (formElement, inputElement, errorMessage) => {
+const showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add("popup__input_type_error");
-  errorElement.classList.add("popup__input-error_active");
+  inputElement.classList.add(validationConfig.inputErrorClass);
+  errorElement.classList.add(validationConfig.errorActiveClass);
   if (inputElement.validity.patternMismatch) {
     errorElement.textContent =
-      "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы";
+      inputElement.dataset.errorMessage;
   } else {
     errorElement.textContent = errorMessage;
   }
 };
 
 /* Функция скрытия ошибки */
-const hideInputError = (formElement, inputElement) => {
+const hideInputError = (formElement, inputElement, validationConfig) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove("popup__input_type_error");
-  errorElement.classList.remove("popup__input-error_active");
+  inputElement.classList.remove(validationConfig.inputErrorClass);
+  errorElement.classList.remove(validationConfig.errorActiveClass);
   errorElement.textContent = "";
 };
 
 /* Функция проверки, есть ли ошибка */
-const checkInputValidity = (formElement, inputElement) => {
+const checkInputValidity = (formElement, inputElement, validationConfig) => {
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
   } else {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, validationConfig);
   }
 };
 
 /* Функция установки значения валидности для кнопки и текста формы */
-const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
-  const buttonElement = formElement.querySelector(".popup__button");
-  toggleButtonState(inputList, buttonElement);
+const setEventListeners = (formElement, validationConfig) => {
+  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, validationConfig);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
-      checkInputValidity(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement);
+      checkInputValidity(formElement, inputElement, validationConfig);
+      toggleButtonState(inputList, buttonElement, validationConfig);
     });
   });
 };
 
 /* Функция отмены стандартной валидации браузер для форм */
-export function enableValidation() {
-  const formList = Array.from(document.querySelectorAll(".popup__form"));
+export function enableValidation(validationConfig) {
+  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
   formList.forEach((formElement) => {
     formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
-    setEventListeners(formElement);
+    setEventListeners(formElement, validationConfig);
   });
 }
 
@@ -60,31 +60,31 @@ function hasInvalidInput(inputList) {
 }
 
 /* Функция активации/деактивации кнопки "сохранить в форме" */
-function toggleButtonState(inputList, buttonElement) {
+function toggleButtonState(inputList, buttonElement, validationConfig) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add("popup__button_inactive");
+    buttonElement.classList.add(validationConfig.inactiveButtonClass);
   } else {
-    buttonElement.classList.remove("popup__button_inactive");
+    buttonElement.classList.remove(validationConfig.inactiveButtonClass);
   }
 }
 
 /* Функция очистки поля валидации */
-export function clearErrorValid(form) {
+export function clearErrorValid(form, validationConfig) {
   const spanErrors = Array.from(
-    document.querySelectorAll(".popup__input-error")
+    document.querySelectorAll(validationConfig.errorClass)
   );
 
   spanErrors.forEach((spanError) => {
     spanError.textContent = "";
-    spanError.classList.remove("popup__input-error_active");
+    spanError.classList.remove(validationConfig.errorActiveClass);
     if (
       form
-        .querySelector(".popup__input")
-        .classList.contains("popup__input_type_error")
+        .querySelector(validationConfig.inputSelector)
+        .classList.contains(validationConfig.inputErrorClass)
     ) {
       form
-        .querySelector(".popup__input")
-        .classList.remove("popup__input_type_error");
+        .querySelector(validationConfig.inputSelector)
+        .classList.remove(validationConfig.inputErrorClass);
     }
   });
 }
