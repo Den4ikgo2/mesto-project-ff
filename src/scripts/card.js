@@ -6,11 +6,8 @@ export function cardCreate(
   link,
   alt,
   likeLenght,
-  /* cardDel, */
   pushButtonlike,
   imageElement,
-  /* cardIsMine, */
-  /* cardMeLike, */
   cardId,
   userId,
   cardLikeId
@@ -30,8 +27,6 @@ export function cardCreate(
 
   /* Подсчёт лайков для отображения количества */
   LikesCount.textContent = Array.from(likeLenght).length;
-
-  /* Функция полного удаления карточки с Api и верстки */
 
   /* Опредление моя ли карточка, добавление/удаление кнопки удалить */
   if (cardIsMine) {
@@ -63,11 +58,6 @@ export function cardCreate(
 export function deleteCardfromDOM(card) {
   card.remove();
 }
-
-/* export function likeCard(event) {
-  event.target.classList.toggle("card__like-button_is-active");
-}
- */
 
 /* Функция для удаления карточки */
 export function deleteCard(event) {

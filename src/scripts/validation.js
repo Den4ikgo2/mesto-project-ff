@@ -1,11 +1,15 @@
 /* Функция выведение ошибки */
-const showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
+const showInputError = (
+  formElement,
+  inputElement,
+  errorMessage,
+  validationConfig
+) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(validationConfig.inputErrorClass);
   errorElement.classList.add(validationConfig.errorActiveClass);
   if (inputElement.validity.patternMismatch) {
-    errorElement.textContent =
-      inputElement.dataset.errorMessage;
+    errorElement.textContent = inputElement.dataset.errorMessage;
   } else {
     errorElement.textContent = errorMessage;
   }
@@ -22,7 +26,12 @@ const hideInputError = (formElement, inputElement, validationConfig) => {
 /* Функция проверки, есть ли ошибка */
 const checkInputValidity = (formElement, inputElement, validationConfig) => {
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
+    showInputError(
+      formElement,
+      inputElement,
+      inputElement.validationMessage,
+      validationConfig
+    );
   } else {
     hideInputError(formElement, inputElement, validationConfig);
   }
@@ -30,8 +39,12 @@ const checkInputValidity = (formElement, inputElement, validationConfig) => {
 
 /* Функция установки значения валидности для кнопки и текста формы */
 const setEventListeners = (formElement, validationConfig) => {
-  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
-  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
+  const inputList = Array.from(
+    formElement.querySelectorAll(validationConfig.inputSelector)
+  );
+  const buttonElement = formElement.querySelector(
+    validationConfig.submitButtonSelector
+  );
   toggleButtonState(inputList, buttonElement, validationConfig);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
@@ -43,7 +56,9 @@ const setEventListeners = (formElement, validationConfig) => {
 
 /* Функция отмены стандартной валидации браузер для форм */
 export function enableValidation(validationConfig) {
-  const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
+  const formList = Array.from(
+    document.querySelectorAll(validationConfig.formSelector)
+  );
   formList.forEach((formElement) => {
     formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();

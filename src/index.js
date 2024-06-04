@@ -1,25 +1,10 @@
 import "./pages/index.css";
-import {
-  cardCreate,
-  /* deleteCardfromDOM, */
-  handleLikeIconClick,
-} from "./scripts/card.js";
+import { cardCreate, handleLikeIconClick } from "./scripts/card.js";
 import { openModal, closePopupByOverlay, closeModal } from "./scripts/modal.js";
-/* import {
-  handleFormSubmitEdit,
-  handleFormSubmitNew,
-  nameInput,
-  jobInput,
-  formElementEdit,
-  formElementNew,
-  handleFormSubmitProfil,
-  formElementProfil,
-} from "./scripts/form.js"; */
 import { enableValidation, clearErrorValid } from "./scripts/validation.js";
 import {
   userInfoPromise,
   cardsPromise,
-  /*   destructionCard, */
   editCard,
   addCard,
   profilPatch,
@@ -48,7 +33,7 @@ const validationConfig = {
   inactiveButtonClass: "popup__button_inactive",
   inputErrorClass: "popup__input_type_error",
   errorClass: ".popup__input-error",
-  errorActiveClass: "popup__input-error_active"
+  errorActiveClass: "popup__input-error_active",
 };
 
 /* Слушатель, для открытия модального окна редактирования и настройка заполнения модального окна */
@@ -97,7 +82,6 @@ formElementProfil.addEventListener("submit", handleFormSubmitProfil);
 
 enableValidation(validationConfig);
 
-
 /* Подключение к серверу */
 /* Выполнение обещаний после прогрузки необходимой информации с APi. Загрузка на страницу информацию обо мне и погрузка карточек с сервера */
 Promise.all([userInfoPromise(), cardsPromise()])
@@ -112,22 +96,13 @@ Promise.all([userInfoPromise(), cardsPromise()])
 
     /* Выгрузка всех карточек с сервера */
     cardData.forEach((item) => {
-      /* const cardIsMine = userData._id !== item.owner._id; */
-      /* const cardMeLike = userData._id === likeMeCard(item.likes, userData._id); */
       const addElement = cardCreate(
         item.name,
         item.link,
         item.name,
         item.likes,
-        /* () => {
-          destructionCard(item._id).then(() => {
-            deleteCardfromDOM(addElement);
-          });
-        }, */
         handleLikeIconClick,
         clickImage,
-        /* cardIsMine, */
-        /* cardMeLike, */
         item._id,
         userData._id,
         item.owner._id
@@ -139,19 +114,6 @@ Promise.all([userInfoPromise(), cardsPromise()])
   .catch((err) => {
     console.log("Error fetching user and cards data: ", err);
   });
-
-/* Функция для подгрузки лайкнутых мною карточек */
-/* export function likeMeCard(items, userId) {
-  let cardMeLike;
-  items.some((likeId) => {
-    if (likeId._id === userId) {
-      return (cardMeLike = userId);
-    } else {
-      cardMeLike = likeId._id;
-    }
-  });
-  return cardMeLike;
-} */
 
 /* Функция для "лоадера" */
 export function LoadElement(popupLoad, isLoad) {
@@ -170,10 +132,13 @@ export function LoadElement(popupLoad, isLoad) {
 function handleFormSubmitEdit(evt) {
   evt.preventDefault();
   LoadElement(popupEdit, true);
-  
-  editCard(formElementEdit.elements.name.value, formElementEdit.elements.description.value)
+
+  editCard(
+    formElementEdit.elements.name.value,
+    formElementEdit.elements.description.value
+  )
     .then((res) => {
-      console.log(res)
+      console.log(res);
       nameInput.textContent = formElementEdit.elements.name.value;
       jobInput.textContent = formElementEdit.elements.description.value;
       closeModal(popupEdit);
