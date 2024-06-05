@@ -1,39 +1,30 @@
 import { sendLike, deleteLike, destructionCard } from "./Api.js";
 
 /* Функция создания карточки */
-export function cardCreate(
-  name,
-  link,
-  alt,
-  likeLenght,
-  pushButtonlike,
-  imageElement,
-  cardId,
-  userId,
-  cardLikeId
-) {
+export function cardCreate(objectCard, pushButtonlike, openImageElement) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   const buttonLike = cardElement.querySelector(".card__like-button");
   const cardImage = cardElement.querySelector(".card__image");
-  const cardIsMine = userId !== cardLikeId;
-  const cardMeLike = userId === likeMeCard(likeLenght, userId);
+  const cardIsMine = objectCard.userId !== objectCard.cardOwnerId;
+  const cardMeLike =
+    objectCard.userId === likeMeCard(objectCard.cardLikes, objectCard.userId);
   let LikesCount = cardElement.querySelector(".card__like_lenght");
 
-  cardElement.querySelector(".card__image").src = link;
-  cardElement.querySelector(".card__title").textContent = name;
-  cardElement.querySelector(".card__image").alt = alt;
+  cardElement.querySelector(".card__image").src = objectCard.cardLink;
+  cardElement.querySelector(".card__title").textContent = objectCard.cardName;
+  cardElement.querySelector(".card__image").alt = objectCard.cardName;
 
   /* Подсчёт лайков для отображения количества */
-  LikesCount.textContent = Array.from(likeLenght).length;
+  LikesCount.textContent = Array.from(objectCard.cardLikes).length;
 
   /* Опредление моя ли карточка, добавление/удаление кнопки удалить */
   if (cardIsMine) {
     buttonDelete.remove();
   } else {
     buttonDelete.addEventListener("click", () => {
-      deleteCardfromDomAndApi(cardId, cardElement);
+      deleteCardfromDomAndApi(objectCard.cardId, cardElement);
     });
   }
 
@@ -45,11 +36,11 @@ export function cardCreate(
 
   /* Добавление слушателя на кнопку лайка */
   buttonLike.addEventListener("click", () => {
-    pushButtonlike(cardId, buttonLike, LikesCount);
+    pushButtonlike(objectCard.cardId, buttonLike, LikesCount);
   });
 
   /* Добавление слушателя при нажатии на картинку */
-  cardImage.addEventListener("click", imageElement);
+  cardImage.addEventListener("click", openImageElement);
 
   return cardElement;
 }
@@ -57,12 +48,6 @@ export function cardCreate(
 /* Функция для удаления карточки из массива DOM */
 export function deleteCardfromDOM(card) {
   card.remove();
-}
-
-/* Функция для удаления карточки */
-export function deleteCard(event) {
-  const deleteItem = event.target.closest(".card");
-  deleteItem.remove();
 }
 
 /* Функция добавления/удаления лайка на сервере, а также закрашивание/осветление кнопки */
@@ -73,20 +58,20 @@ export const handleLikeIconClick = (cardId, likeButton, LikesCount) => {
     sendLike(cardId)
       .then(() => {
         likeButton.classList.toggle("card__like-button_is-active");
+        LikesCount.textContent = +LikesCount.textContent + 1;
       })
       .catch((err) => {
         console.log(err);
       });
-    LikesCount.textContent = +LikesCount.textContent + 1;
   } else {
     deleteLike(cardId)
       .then(() => {
         likeButton.classList.toggle("card__like-button_is-active");
+        LikesCount.textContent = +LikesCount.textContent - 1;
       })
       .catch((err) => {
         console.log(err);
       });
-    LikesCount.textContent = +LikesCount.textContent - 1;
   }
 };
 

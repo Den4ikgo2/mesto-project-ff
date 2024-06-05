@@ -15,7 +15,6 @@ const container = document.querySelector(".content");
 const buttonEdit = document.querySelector(".profile__edit-button");
 const buttonNew = document.querySelector(".profile__add-button");
 const popups = document.querySelectorAll(".popup");
-const profileImage = document.querySelector(".profile__image");
 const profilEdit = document.querySelector(".profile__image");
 const popupEdit = document.querySelector(".popup_type_edit");
 const popupProfilEdit = document.querySelector(".popup_profil_edit");
@@ -89,23 +88,26 @@ Promise.all([userInfoPromise(), cardsPromise()])
     /* Отображение моего имени и моей работы */
     nameInput.textContent = userData.name;
     jobInput.textContent = userData.about;
-    profileImage.setAttribute(
+    profilEdit.setAttribute(
       "style",
       `background-image: url('${userData.avatar}')`
     );
 
     /* Выгрузка всех карточек с сервера */
     cardData.forEach((item) => {
+      const objectCard = {
+        cardName: item.name,
+        cardLink: item.link,
+        cardLikes: item.likes,
+        cardId: item._id,
+        userId: userData._id,
+        cardOwnerId: item.owner._id,
+      };
+
       const addElement = cardCreate(
-        item.name,
-        item.link,
-        item.name,
-        item.likes,
+        objectCard,
         handleLikeIconClick,
-        clickImage,
-        item._id,
-        userData._id,
-        item.owner._id
+        clickImage
       );
       placesList.append(addElement);
     });
@@ -163,20 +165,18 @@ function handleFormSubmitNew(evt) {
     formElementNew.elements.place_name.value,
     formElementNew.elements.link.value
   )
-    .then((card) => {
+    .then((item) => {
+      const objectCard = {
+        cardName: item.name,
+        cardLink: item.link,
+        cardLikes: item.likes,
+        cardId: item._id,
+        userId: item.owner._id,
+        cardOwnerId: item.owner._id,
+      };
+
       placesList.prepend(
-        cardCreate(
-          formElementNew.elements.place_name.value,
-          formElementNew.elements.link.value,
-          formElementNew.elements.place_name.value,
-          card.likes,
-          /* deleteCard, */
-          handleLikeIconClick,
-          clickImage,
-          card._id,
-          card.owner._id,
-          card.owner._id
-        )
+        cardCreate(objectCard, handleLikeIconClick, clickImage)
       );
       formElementNew.reset();
       closeModal(popupNew);
@@ -199,7 +199,7 @@ function handleFormSubmitProfil(evt) {
   profilPatch(formElementProfil.elements.avatar.value)
     .then(() => {
       console.log(formElementProfil.elements.avatar.value);
-      profileImage.setAttribute(
+      profilEdit.setAttribute(
         "style",
         `background-image: url("${formElementProfil.elements.avatar.value}")`
       );
